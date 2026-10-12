@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misi Detektif Bahasa - Kelas 2 Intelligent</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: #f0f4fe;
+            user-select: none;
+        }
+        .animate-bounce-short {
+            animation: bounce 0.6s ease-in-out 1;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.15), 0 8px 10px -6px rgba(99, 102, 241, 0.1);
+        }
+    </style>
+</head>
+<body class="text-gray-800 pb-12 min-h-screen">
+
+    <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-50 border-b-4 border-indigo-800">
+        <div class="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="bg-yellow-400 p-2 rounded-xl text-indigo-900 shadow">
+                    <i class="fa-solid fa-user-secret text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base md:text-lg leading-tight">Misi Detektif Bahasa</h1>
+                    <p class="text-xs text-indigo-200">Kelas 2 Intelligent</p>
+                </div>
+            </div>
+            <!-- Navigation Buttons (Tanpa perkataan Leaderboard) -->
+            <div class="flex space-x-2 text-xs md:text-sm">
+                <button onclick="showTab('game')" id="btn-tab-game" class="px-3 py-1.5 rounded-xl bg-indigo-800 text-white font-semibold transition flex items-center gap-1.5 shadow">
+                    <i class="fa-solid fa-gamepad text-yellow-300"></i> Permainan
+                </button>
+                <button onclick="showTab('rank')" id="btn-tab-rank" class="px-3 py-1.5 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white font-semibold transition flex items-center gap-1.5 shadow">
+                    <i class="fa-solid fa-award text-yellow-300"></i> Carta Prestasi
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 mt-5">
+
+        <section id="tab-game" class="block space-y-5">
+
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-5 text-white shadow-lg relative overflow-hidden">
+                <div class="relative z-10">
+                    <span class="bg-yellow-300 text-indigo-950 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">BM Tahun 2</span>
+                    <h2 class="text-xl md:text-2xl font-bold mt-2">Misi Idea Keseluruhan (20 Soalan)</h2>
+                    <p class="text-indigo-100 text-xs md:text-sm mt-1">Bantu Koperal Ejaan menyelesaikan 20 kes rahsia!</p>
+                </div>
+                <i class="fa-solid fa-magnifying-glass text-white/20 text-7xl absolute -right-2 -bottom-2 transform -rotate-12"></i>
+            </div>
+
+            <!-- Quiz Card Container -->
+            <div id="quiz-card" class="bg-white rounded-2xl card-shadow p-5 md:p-6 border border-indigo-100 relative">
+                
+                <!-- Progress Header -->
+                <div class="mb-5">
+                    <div class="flex justify-between items-center text-xs font-bold text-gray-500 mb-2">
+                        <span id="question-number" class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">Soalan 1 daripada 20</span>
+                        <span id="score-display" class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full"><i class="fa-solid fa-star text-yellow-500 mr-1"></i>0 XP</span>
+                    </div>
+                    <div class="w-full bg-gray-100 rounded-full h-3.5 p-0.5 border">
+                        <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 to-purple-500 h-2.5 rounded-full transition-all duration-300" style="width: 5%"></div>
+                    </div>
+                </div>
+
+                <!-- Reading Passage Container -->
+                <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-2xl mb-5">
+                    <h3 class="font-bold text-amber-900 text-xs uppercase tracking-wider flex items-center gap-2 mb-1">
+                        <i class="fa-solid fa-file-lines text-amber-600"></i> Petikan Kes #<span id="case-id">1</span>
+                    </h3>
+                    <p id="passage-text" class="text-gray-700 text-sm md:text-base leading-relaxed font-medium">
+                        <!-- Passage loaded via JS -->
+                    </p>
+                </div>
+
+                <!-- Question Text -->
+                <div class="mb-4">
+                    <h4 id="question-text" class="font-bold text-gray-800 text-base md:text-lg">
+                        <!-- Question loaded via JS -->
+                    </h4>
+                </div>
+
+                <!-- Multiple Choice Options -->
+                <div id="options-container" class="space-y-3">
+                    <!-- Options populated dynamically -->
+                </div>
+
+                <!-- Feedback Alert Box -->
+                <div id="feedback-box" class="hidden mt-4 p-3.5 rounded-xl text-xs md:text-sm font-bold text-center flex items-center justify-center gap-2">
+                    <!-- Feedback message -->
+                </div>
+
+                <!-- Next Button Container -->
+                <div class="mt-5 flex justify-end">
+                    <button id="btn-next" onclick="nextQuestion()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-xl shadow-md transition flex items-center gap-2 text-sm">
+                        Soalan Seterusnya <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Quiz Completion Modal / Section -->
+            <div id="quiz-completed" class="hidden bg-white rounded-2xl card-shadow p-6 text-center space-y-5 border border-indigo-100">
+                <div class="inline-block p-4 bg-yellow-100 text-yellow-600 rounded-full text-5xl animate-bounce-short">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800">Tahniah, Detektif Cilik!</h3>
+                <p class="text-gray-600 text-sm max-w-md mx-auto">
+                    Anda telah berjaya menjawab semua **20 Soalan**!
+                </p>
+
+                <!-- Score Badge -->
+                <div class="bg-indigo-50 border border-indigo-100 p-4 rounded-xl inline-block w-full max-w-xs">
+                    <p class="text-xs text-indigo-500 uppercase font-bold tracking-wider">Jumlah Markah Anda</p>
+                    <p id="final-score" class="text-3xl font-extrabold text-indigo-600 my-1">0 XP</p>
+                    <p id="final-accuracy" class="text-xs text-emerald-600 font-semibold">Penguasaan: 0%</p>
+                </div>
+
+                <!-- Input Nama Murid -->
+                <div class="bg-gray-50 p-4 rounded-xl text-left max-w-md mx-auto border space-y-3">
+                    <label class="block text-xs font-bold text-gray-700 uppercase">Simpan Rekod Pencapaian Murid:</label>
+                    <input type="text" id="student-name-input" placeholder="Masukkan Nama Murid..." class="w-full px-3.5 py-2.5 text-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                    <button onclick="saveStudentRecord()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow transition text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-circle-check"></i> Simpan Rekod Murid
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="tab-rank" class="hidden space-y-5">
+            
+            <!-- Section Header -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-indigo-100 flex flex-col md:flex-row justify-between items-center gap-3">
+                <div>
+                    <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fa-solid fa-award text-yellow-500"></i> Carta Prestasi Murid (40 Slot)
+                    </h2>
+                    <p class="text-xs text-gray-500">Senarai rekod penyelesaian tugasan murid Kelas 2 Intelligent.</p>
+                </div>
+                <!-- Search Input -->
+                <div class="w-full md:w-auto">
+                    <input type="text" id="search-input" onkeyup="filterPerformanceList()" placeholder="Cari rekod murid..." class="w-full md:w-48 px-3 py-1.5 text-xs border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+            </div>
+
+            <!-- 40 Empty / Filled Slots Table -->
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-indigo-100">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-indigo-50 text-indigo-900 text-xs uppercase tracking-wider border-b border-indigo-100">
+                                <th class="p-3.5">No.</th>
+                                <th class="p-3.5">Nama Murid</th>
+                                <th class="p-3.5 text-center">Status Misi</th>
+                                <th class="p-3.5 text-right">Markah (XP)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="performance-table-body" class="divide-y divide-gray-100 text-xs md:text-sm">
+                            <!-- Populated dynamically (40 slots) -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        // Global Game State
+        let currentQuestionIndex = 0;
+        let totalScore = 0;
+        let correctAnswersCount = 0;
+        let answeredQuestions = Array(20).fill(false);
+
+        // 40 Empty Slots Array
+        let studentRecords = Array.from({ length: 40 }, (_, i) => ({
+            id: i + 1,
+            name: "", // Kosong secara default
+            xp: 0,
+            status: "Belum Selesai"
+        }));
+
+        // 20 Questions Dataset (Bahasa Melayu Tahun 2 - Idea Keseluruhan & Pemahaman)
+        const questionsData = [
+            {
+                passage: "Adam menyapu lantai biliknya setiap hari. Dia juga menyusun buku di atas meja supaya kemas. Bilik Adam kelihatan sangat bersih.",
+                question: "Apakah idea keseluruhan petikan di atas?",
+                options: [
+                    "Adam menyapu lantai bilik sahaja.",
+                    "Amalan menjaga kebersihan bilik Adam.",
+                    "Cara-cara menyusun buku di meja."
+                ],
+                correct: 1
+            },
+            {
+                passage: "Aina suka makan buah-buahan seperti epal, pisang, dan tembikai. Buah-buahan mengandungi banyak vitamin yang sihat untuk badan.",
+                question: "Apakah idea keseluruhan petikan ini?",
+                options: [
+                    "Kebaikan makan buah-buahan untuk kesihatan.",
+                    "Buah epal dan pisang berasa manis.",
+                    "Aina tidak suka makan sayur-sayuran."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Kucing comel bernama Comel rajin menangkap tikus di rumah. Comel juga suka bermain bola benang pada waktu petang.",
+                question: "Apakah idea utama petikan ini?",
+                options: [
+                    "Kucing comel yang rajin dan aktif.",
+                    "Tikus suka tinggal di dalam rumah.",
+                    "Bola benang berwarna merah."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Murid-murid Kelas 2 Intelligent membaca buku di perpustakaan. Suasana di perpustakaan sangat tenang dan senyap.",
+                question: "Apakah idea keseluruhan petikan ini?",
+                options: [
+                    "Buku cerita perpustakaan sangat tebal.",
+                    "Aktiviti membaca di perpustakaan.",
+                    "Murid-murid bermain di perpustakaan."
+                ],
+                correct: 1
+            },
+            {
+                passage: "Pokok bunga mawar berbau harum. Pokok ini memerlukan air dan cahaya matahari untuk membesar dengan segar.",
+                question: "Apakah idea keseluruhan petikan di atas?",
+                options: [
+                    "Keperluan dan keindahan pokok bunga mawar.",
+                    "Bunga mawar mempunyai duri tajam.",
+                    "Cahaya matahari berasa sangat panas."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Setiap pagi, Pok Cik Zainal menjual roti canai yang lembut dan garing. Ramai pelanggan beratur untuk membeli rotinya.",
+                question: "Apakah idea keseluruhan petikan ini?",
+                options: [
+                    "Jualan roti canai Pok Cik Zainal yang laris.",
+                    "Cara-cara membuat roti canai lembut.",
+                    "Pelanggan suka minum teh tarik."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Basikal baharu Syamil berwarna biru. Syamil menunggang basikal dengan berhati-hati di taman permainan.",
+                question: "Apakah idea keseluruhan petikan di atas?",
+                options: [
+                    "Syamil menunggang basikal baharunya dengan cermat.",
+                    "Taman permainan itu sangat luas.",
+                    "Warna biru ialah warna kegemaran Syamil."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Ibu memasak sup ayam yang lezat. Sup ayam itu dimasukkan daun sup dan bawang goreng yang wangi.",
+                question: "Apakah idea keseluruhan petikan ini?",
+                options: [
+                    "Ibu membeli bawang goreng di kedai.",
+                    "Masakan sup ayam ibu yang enak.",
+                    "Sup ayam dihidangkan dalam mangkuk."
+                ],
+                correct: 1
+            },
+            {
+                passage: "Gajah ialah haiwan darat yang paling besar. Gajah mempunyai belalai panjang dan gading yang kuat.",
+                question: "Apakah idea keseluruhan petikan di atas?",
+                options: [
+                    "Ciri-ciri fizikal haiwan gajah.",
+                    "Gajah suka makan daun kayu.",
+                    "Belalai gajah sangat panjang."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Haris membasuh tangannya menggunakan sabun sebelum makan. Ini dapat mengelakkan kuman masuk ke dalam badan.",
+                question: "Apakah idea keseluruhan petikan ini?",
+                options: [
+                    "Kepentingan membasuh tangan sebelum makan.",
+                    "Sabun mandi berbau sangat harum.",
+                    "Kuman bersaiz sangat kecil."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Taman bunga di sekolah kelihatan indah. Terdapat pelbagai jenis bunga berwarna-warni yang mekar.",
+                question: "Apakah idea keseluruhan petikan di atas?",
+                options: [
+                    "Keindahan taman bunga di sekolah.",
+                    "Murid menyiram bunga pada waktu pagi.",
+                    "Sekolah mempunyai banyak bilik darjah."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Zara sentiasa menyiapkan tugasan sekolah yang diberi oleh guru. Dia seorang murid yang rajin dan tekun.",
+                question: "Apakah idea keseluruhan petikan ini?",
+                options: [
+                    "Sikap rajin Zara dalam pelajaran.",
+                    "Guru memberi tugasan pada setiap hari.",
+                    "Zara mempunyai ramai kawan."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Hujan turun dengan lebat pada petang ini. Luqman menggunakan payung semasa berjalan pulang dari sekolah.",
+                question: "Apakah idea keseluruhan petikan di atas?",
+                options: [
+                    "Luqman berpayung semasa hujan lebat.",
+                    "Luqman berjalan kaki bersama kawan.",
+                    "Payung Luqman berwarna kuning."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Nasi lemak merupakan makanan tradisi yang popular. Nasi lemak enak dimakan bersama sambal, telur, dan timun.",
+                question: "Apakah idea keseluruhan petikan ini?",
+                options: [
+                    "Keenakan nasi lemak sebagai makanan tradisi.",
+                    "Sambal nasi lemak berasa sangat pedas.",
+                    "Timun dipotong halus-halus."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Abang membersihkan cermin mata menggunakan kain lembut supaya cermin matanya tidak tercalar.",
+                question: "Apakah idea keseluruhan petikan di atas?",
+                options: [
+                    "Cara abang menjaga cermin matanya.",
+                    "Cermin mata abang berbentuk bulat.",
+                    "Kain lembut disimpan di dalam beg."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Ikan berenang menggunakan sirip dan ekor. Ikan bernafas di dalam air menggunakan insang.",
+                question: "Apakah idea keseluruhan petikan ini?",
+                options: [
+                    "Cara ikan bergerak dan bernafas dalam air.",
+                    "Ikan berenang di dalam akuarium akuarium.",
+                    "Makanan ikan berbentuk pelet."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Jam dinding di kelas menunjukkan pukul 1:00 tengah hari. Murid-murid bersedia untuk pulang ke rumah.",
+                question: "Apakah idea keseluruhan petikan di atas?",
+                options: [
+                    "Waktu murid-murid bersedia untuk pulang.",
+                    "Jam dinding berbentuk bulat.",
+                    "Beg sekolah murid sangat berat."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Siti dan rakan-rakan bermain lompat tali di padang. Mereka berasa gembira dapat bersenam bersama-sama.",
+                question: "Apakah idea keseluruhan petikan ini?",
+                options: [
+                    "Aktiviti bermain lompat tali yang menggembirakan.",
+                    "Tali lompat diperbuat daripada getah.",
+                    "Padang sekolah sangat luas."
+                ],
+                correct: 0
+            },
+            {
+                passage: "Pokok kelapa mempunyai pelbagai kegunaan. Buahnya boleh diminum airnya manakala daunnya boleh dibuat ketupat.",
+                question: "Apakah idea keseluruhan petikan di atas?",
+                options: [
+                    "Pelbagai kegunaan pokok kelapa.",
+                    "Air kelapa berasa manis dan segar.",
+                    "Daun kelapa berwarna hijau."
+                ],
+                correct: 0
+            },
+            {
+                passage: "AMALAN MEMBACA MEMBENTUK INSAN BIJAK. Selalu membaca buku dapat menambah ilmu pengetahuan kita.",
+                question: "Apakah idea keseluruhan petikan ini?",
+                options: [
+                    "Faedah amalan membaca buku.",
+                    "Buku cerita mengandungi gambar.",
+                    "Membaca buku membuatkan kita mengantuk."
+                ],
+                correct: 0
+            }
+        ];
+
+        function showTab(tabName) {
+            const gameTab = document.getElementById('tab-game');
+            const rankTab = document.getElementById('tab-rank');
+            const btnGame = document.getElementById('btn-tab-game');
+            const btnRank = document.getElementById('btn-tab-rank');
+
+            if (tabName === 'game') {
+                gameTab.classList.remove('hidden');
+                rankTab.classList.add('hidden');
+                btnGame.classList.replace('bg-indigo-700', 'bg-indigo-800');
+                btnRank.classList.replace('bg-indigo-800', 'bg-indigo-700');
+            } else {
+                gameTab.classList.add('hidden');
+                rankTab.classList.remove('hidden');
+                btnRank.classList.replace('bg-indigo-700', 'bg-indigo-800');
+                btnGame.classList.replace('bg-indigo-800', 'bg-indigo-700');
+                renderPerformanceTable();
+            }
+        }
+
+        function loadQuestion() {
+            const data = questionsData[currentQuestionIndex];
+            
+            // Update Headers & Indicators
+            document.getElementById('question-number').innerText = `Soalan ${currentQuestionIndex + 1} daripada 20`;
+            document.getElementById('case-id').innerText = currentQuestionIndex + 1;
+            document.getElementById('score-display').innerHTML = `<i class="fa-solid fa-star text-yellow-500 mr-1"></i>${totalScore} XP`;
+            
+            const progressPercent = ((currentQuestionIndex + 1) / 20) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            // Load Passage and Question
+            document.getElementById('passage-text').innerText = `"${data.passage}"`;
+            document.getElementById('question-text').innerText = `${currentQuestionIndex + 1}. ${data.question}`;
+
+            // Load Options
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            data.options.forEach((optText, index) => {
+                const button = document.createElement('button');
+                button.className = "w-full text-left p-3.5 rounded-xl border-2 border-gray-100 hover:border-indigo-400 hover:bg-indigo-50/50 font-medium text-xs md:text-sm transition flex items-center justify-between group";
+                button.onclick = () => handleAnswer(index);
+                
+                button.innerHTML = `
+                    <span class="flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
+                            ${String.fromCharCode(65 + index)}
+                        </span>
+                        <span>${optText}</span>
+                    </span>
+                    <i class="fa-regular fa-circle text-gray-300 group-hover:text-indigo-500"></i>
+                `;
+                optionsContainer.appendChild(button);
+            });
+
+            // Hide feedback and Next button
+            document.getElementById('feedback-box').className = "hidden";
+            document.getElementById('btn-next').classList.add('hidden');
+        }
+
+        function handleAnswer(selectedIndex) {
+            if (answeredQuestions[currentQuestionIndex]) return;
+
+            const data = questionsData[currentQuestionIndex];
+            const feedbackBox = document.getElementById('feedback-box');
+            const optionsContainer = document.getElementById('options-container');
+            const buttons = optionsContainer.querySelectorAll('button');
+
+            answeredQuestions[currentQuestionIndex] = true;
+
+            // Disable all option buttons
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedIndex === data.correct) {
+                totalScore += 10;
+                correctAnswersCount++;
+                feedbackBox.className = "mt-4 p-3.5 rounded-xl text-xs md:text-sm font-bold text-center flex items-center justify-center gap-2 bg-emerald-100 text-emerald-800 border border-emerald-200";
+                feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i> Tepat sekali! Jawapan anda betul (+10 XP)`;
+                buttons[selectedIndex].classList.add('border-emerald-500', 'bg-emerald-50');
+            } else {
+                feedbackBox.className = "mt-4 p-3.5 rounded-xl text-xs md:text-sm font-bold text-center flex items-center justify-center gap-2 bg-rose-100 text-rose-800 border border-rose-200";
+                feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 text-lg"></i> Kurang tepat. Jawapan betul ialah B pilihan yang sesuai.`;
+                buttons[selectedIndex].classList.add('border-rose-400', 'bg-rose-50');
+                buttons[data.correct].classList.add('border-emerald-500', 'bg-emerald-50');
+            }
+
+            document.getElementById('score-display').innerHTML = `<i class="fa-solid fa-star text-yellow-500 mr-1"></i>${totalScore} XP`;
+            document.getElementById('btn-next').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < 19) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showQuizCompleted();
+            }
+        }
+
+        function showQuizCompleted() {
+            document.getElementById('quiz-card').classList.add('hidden');
+            const completedCard = document.getElementById('quiz-completed');
+            completedCard.classList.remove('hidden');
+
+            document.getElementById('final-score').innerText = `${totalScore} XP`;
+            const accuracy = Math.round((correctAnswersCount / 20) * 100);
+            document.getElementById('final-accuracy').innerText = `Penguasaan: ${accuracy}% (${correctAnswersCount}/20 Betul)`;
+        }
+
+        function saveStudentRecord() {
+            const inputName = document.getElementById('student-name-input').value.trim();
+            if (!inputName) {
+                alert("Sila masukkan nama murid terlebih dahulu.");
+                return;
+            }
+
+            // Find first empty slot or push to list
+            const emptyIndex = studentRecords.findIndex(s => s.name === "");
+            if (emptyIndex !== -1) {
+                studentRecords[emptyIndex].name = inputName;
+                studentRecords[emptyIndex].xp = totalScore;
+                studentRecords[emptyIndex].status = "Selesai 🟢";
+            } else {
+                alert("Semua 40 slot rekod telah dipenuhi.");
+            }
+
+            alert(`Rekod untuk ${inputName} telah berjaya disimpan!`);
+            showTab('rank');
+        }
+
+        function renderPerformanceTable(filterText = '') {
+            const tbody = document.getElementById('performance-table-body');
+            tbody.innerHTML = '';
+
+            const filtered = studentRecords.filter(item => 
+                item.name.toLowerCase().includes(filterText.toLowerCase()) || filterText === ''
+            );
+
+            filtered.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.className = "hover:bg-indigo-50/40 transition";
+
+                const isFilled = item.name !== "";
+
+                row.innerHTML = `
+                    <td class="p-3.5 font-bold text-gray-500">${item.id}</td>
+                    <td class="p-3.5 font-medium ${isFilled ? 'text-gray-900 font-semibold' : 'text-gray-400 italic'}">
+                        ${isFilled ? item.name : '(Slot Kosong)'}
+                    </td>
+                    <td class="p-3.5 text-center">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold ${isFilled ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-400'}">
+                            ${item.status}
+                        </span>
+                    </td>
+                    <td class="p-3.5 text-right font-bold ${isFilled ? 'text-indigo-600' : 'text-gray-300'}">
+                        ${item.xp} XP
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterPerformanceList() {
+            const query = document.getElementById('search-input').value;
+            renderPerformanceTable(query);
+        }
+
+        window.onload = function() {
+            loadQuestion();
+            renderPerformanceTable();
+        };
+    </script>
+</body>
+</html>
